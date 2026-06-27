@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<script>
+const offerMap = {
+  'WAVE8X7K2': 'Waves',
+  'STOR9X3K1': 'StoryMax',
+  'WOWT5X2K9': 'WowTv'
+};
+
+const params = new URLSearchParams(window.location.search);
+const cid = params.get('cid');
+const offer = offerMap[cid];
+
+if (offer) {
+  window.location.replace('/offers/' + offer + '.html');
+} else {
+  document.body.innerHTML = '<h2 style="text-align:center;margin-top:40px;font-family:sans-serif;">Invalid Link</h2>';
+}
+</script>
+</body>
+</html>
