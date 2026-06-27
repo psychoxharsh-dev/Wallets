@@ -17,7 +17,14 @@ const cid = params.get('cid');
 const offer = offerMap[cid];
 
 if (offer) {
-  window.location.replace('/offers/' + offer + '.html');
+  // ✅ URL change nahi hoga
+  fetch('/offers/' + offer + '.html')
+    .then(r => r.text())
+    .then(html => {
+      document.open();
+      document.write(html);
+      document.close();
+    });
 } else {
   document.body.innerHTML = '<h2 style="text-align:center;margin-top:40px;font-family:sans-serif;">Invalid Link</h2>';
 }
