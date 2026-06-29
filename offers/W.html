@@ -3,17 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-<title>HDFC  - CashFlix ⚡</title>
+<title>Hdfc Sky - CashFlix ⚡</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Nunito',sans-serif; background:#f0f4ff; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+
 .main-card { background:#fff; border-radius:24px; padding:24px; max-width:420px; width:100%; box-shadow:0 8px 32px rgba(0,0,0,0.10); border-top:4px solid #0d47a1; }
-.pause-card { width:320px; background:#fff; border-radius:35px; padding:85px 25px 40px; text-align:center; position:relative; box-shadow:0 15px 35px rgba(0,0,0,0.12); }
-.pause-icon { position:absolute; top:-42px; left:50%; transform:translateX(-50%); width:100px; height:100px; border-radius:50%; background:#73f000; display:flex; justify-content:center; align-items:center; box-shadow:0 5px 15px rgba(0,0,0,0.18); }
-.pause-icon .bar { width:8px; height:42px; background:#176300; border-radius:20px; margin:0 8px; }
-.pause-title { font-size:15px; font-weight:800; line-height:1.2; color:#111; margin-bottom:28px; }
-.pause-text { font-size:12px; line-height:1.8; color:#9d9d9d; font-weight:600; }
+
+/* New Paused Card - Green Circle Style */
+.pause-card {
+  width: 320px;
+  background: #fff;
+  border-radius: 35px;
+  padding: 85px 25px 40px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+}
+.pause-icon {
+  position: absolute;
+  top: -42px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #73f000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.18);
+}
+.pause-icon .bar {
+  width: 8px;
+  height: 42px;
+  background: #176300;
+  border-radius: 20px;
+  margin: 0 8px;
+}
+.pause-title {
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #111;
+  margin-bottom: 28px;
+}
+.pause-text {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #9d9d9d;
+  font-weight: 600;
+}
+
 .header { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
 .app-icon { width:64px; height:64px; border-radius:16px; background:linear-gradient(135deg,#0d47a1,#1565c0); display:flex; align-items:center; justify-content:center; font-size:28px; flex-shrink:0; }
 .header-text h1 { font-size:22px; font-weight:900; color:#1a1a2e; }
@@ -44,22 +89,17 @@ body { font-family:'Nunito',sans-serif; background:#f0f4ff; min-height:100vh; di
 .powered span { color:#0d47a1; }
 .toast { position:fixed; top:30px; left:50%; transform:translateX(-50%); background:#fff; color:#10b981; padding:12px 24px; border-radius:40px; font-size:14px; font-weight:800; text-align:center; z-index:10000; opacity:0; visibility:hidden; transition:all 0.3s ease; box-shadow:0 10px 25px -5px rgba(0,0,0,0.1); font-family:'Nunito',sans-serif; display:flex; align-items:center; gap:8px; white-space:nowrap; border:1px solid #e5e7eb; }
 .toast.show { opacity:1; visibility:visible; }
-.hidden { display:none; }
-.auto-screen { text-align:center; padding:40px 20px; }
-.auto-spinner { width:60px; height:60px; border:5px solid #e8ecf4; border-top:5px solid #0d47a1; border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 20px; }
-@keyframes spin { to{transform:rotate(360deg)} }
-.auto-title { font-size:18px; font-weight:900; color:#1a1a2e; margin-bottom:8px; }
-.auto-sub { font-size:13px; color:#888; font-weight:600; }
+.hidden { display: none; }
 </style>
 </head>
 <body>
 
 <!-- Form Card -->
-<div id="formCard" class="main-card hidden">
+<div id="formCard" class="main-card">
   <div class="header">
-    <div class="app-icon"><img src="https://i.ibb.co/dwHbZyzW/hdfc-bank.jpg" style="width:100%;height:100%;border-radius:16px;object-fit:cover;"></div>
+   <div class="app-icon"><img src="https://i.ibb.co/601CpSKw/digi-credit-logo.jpg" style="width:100%;height:100%;border-radius:16px;object-fit:cover;"></div>
     <div class="header-text">
-      <h1>HDFC SKY</h1>
+      <h1>Hdfc Sky</h1>
       <p>Complete & earn instantly</p>
     </div>
   </div>
@@ -79,28 +119,20 @@ body { font-family:'Nunito',sans-serif; background:#f0f4ff; min-height:100vh; di
   <div class="divider"></div>
   <div class="steps-title">🕐 How to complete this offer?</div>
   <div class="step"><div class="step-num">1</div><div class="step-text">Enter Your Wallet Number & Submit.</div></div>
-  <div class="step"><div class="step-num">2</div><div class="step-text"> Register Partner App.</div></div>
-  <div class="step"><div class="step-num">3</div><div class="step-text">Done You Will Get <span class="highlight">₹8</span> Cashback in Your Wallet.</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-text"> Register Partner Web.</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-text">Done You Will Get <span class="highlight">₹12</span> Cashback in Your Wallet.</div></div>
   <div class="powered">Powered by <span>CashFlix ⚡</span></div>
 </div>
 
-<!-- Auto Redirect Screen -->
-<div id="autoCard" class="main-card hidden">
-  <div class="auto-screen">
-    <div class="auto-spinner"></div>
-    <div class="auto-title">Redirecting...</div>
-    <div class="auto-sub">Please wait, opening offer for you!</div>
-  </div>
-  <div class="powered">Powered by <span>CashFlix ⚡</span></div>
-</div>
-
-<!-- Paused Card -->
+<!-- New Paused Card - Green Circle Style -->
 <div id="pausedCard" class="hidden pause-card">
   <div class="pause-icon">
     <div class="bar"></div>
     <div class="bar"></div>
   </div>
-  <div class="pause-title">Waves Temporarily Paused</div>
+  <div class="pause-title">
+    JIGRI Temporarily Paused<br>
+  </div>
   <div class="pause-text">
     This offer is currently unavailable.<br>
     It will be live again shortly.<br>
@@ -112,69 +144,38 @@ body { font-family:'Nunito',sans-serif; background:#f0f4ff; min-height:100vh; di
 
 <script>
 const OFFER_NAME = 'HDFC SKY';
-const AFFILIATE_LINK = 'https://partner.osamcamp.in/go?o=91&a=237';
-const SERVER = 'https://cashflix-djzw.onrender.com';
+const AFFILIATE_LINK = 'https://track.inrflash.com/click/?offer_id=67&pub=114';
 
-function getPhoneFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  const phone = params.get('ref') || params.get('p') || params.get('phone') || '';
-  return /^[6-9]\d{9}$/.test(phone) ? phone : null;
+async function checkOfferStatus() {
+  try {
+    const res = await fetch(`https://cashflix-djzw.onrender.com/offer-status?offer=${encodeURIComponent(OFFER_NAME)}`);
+    const data = await res.json();
+    if (data.is_active === false) {
+      document.getElementById('formCard').style.display = 'none';
+      document.getElementById('pausedCard').classList.remove('hidden');
+    } else {
+      document.getElementById('formCard').style.display = 'block';
+      document.getElementById('pausedCard').classList.add('hidden');
+    }
+  } catch(e) {
+    document.getElementById('formCard').style.display = 'block';
+    document.getElementById('pausedCard').classList.add('hidden');
+  }
 }
+checkOfferStatus();
 
 async function saveClick(phone) {
   for (let i = 0; i < 3; i++) {
     try {
-      const res = await fetch(`${SERVER}/click`, {
+      await fetch('https://cashflix-djzw.onrender.com/click', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ click_id: phone, offer_name: OFFER_NAME })
       });
-      if (res.ok) break;
-    } catch(e) {
-      await new Promise(r => setTimeout(r, 500));
-    }
+      break;
+    } catch(e) { await new Promise(r => setTimeout(r, 500)); }
   }
 }
-
-function doRedirect(phone) {
-  saveClick(phone);
-  const affiliateLink = AFFILIATE_LINK + '&p1=' + phone;
-  const link = 'https://publisher.cashflix.site/api/redirect?url=' + encodeURIComponent(affiliateLink);
-  setTimeout(() => { window.location.replace(link); }, 1500);
-}
-
-async function checkOfferStatus() {
-  try {
-    const res = await fetch(`${SERVER}/offer-status?offer=${encodeURIComponent(OFFER_NAME)}`);
-    const data = await res.json();
-
-    if (data.is_active === false) {
-      document.getElementById('pausedCard').classList.remove('hidden');
-      return;
-    }
-
-    // ✅ URL mein phone hai — auto redirect
-    const urlPhone = getPhoneFromURL();
-    if (urlPhone) {
-      document.getElementById('autoCard').classList.remove('hidden');
-      doRedirect(urlPhone);
-    } else {
-      // ✅ Normal form
-      document.getElementById('formCard').classList.remove('hidden');
-    }
-
-  } catch(e) {
-    const urlPhone = getPhoneFromURL();
-    if (urlPhone) {
-      document.getElementById('autoCard').classList.remove('hidden');
-      doRedirect(urlPhone);
-    } else {
-      document.getElementById('formCard').classList.remove('hidden');
-    }
-  }
-}
-
-checkOfferStatus();
 
 function handleSubmit() {
   const phone = document.getElementById('phoneInput').value.trim();
@@ -188,10 +189,10 @@ function handleSubmit() {
   submitBtn.innerText = 'Please wait...';
   submitBtn.disabled = true;
   saveClick(phone);
-  const affiliateLink = AFFILIATE_LINK + '&p_sub=' + phone;
+  const affiliateLink = AFFILIATE_LINK + '&p1=' + phone;
   const link = 'https://publisher.cashflix.site/api/redirect?url=' + encodeURIComponent(affiliateLink);
   document.getElementById('toastMessage').classList.add('show');
-  setTimeout(() => { window.location.replace(link); }, 0);
+  setTimeout(() => { window.location.replace(link); }, 1500);
 }
 
 document.getElementById('phoneInput').addEventListener('keypress', function(e) {
@@ -202,4 +203,4 @@ document.getElementById('phoneInput').addEventListener('input', function() {
 });
 </script>
 </body>
-    </html>
+</html>
