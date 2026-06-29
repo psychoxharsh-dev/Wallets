@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-<title>Waves - CashFlix ⚡</title>
+<title>HDFC  - CashFlix ⚡</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -59,13 +59,13 @@ body { font-family:'Nunito',sans-serif; background:#f0f4ff; min-height:100vh; di
   <div class="header">
     <div class="app-icon"><img src="https://i.ibb.co/DfmhrN9x/images.jpg" style="width:100%;height:100%;border-radius:16px;object-fit:cover;"></div>
     <div class="header-text">
-      <h1>Waves</h1>
+      <h1>HDFC SKY</h1>
       <p>Complete & earn instantly</p>
     </div>
   </div>
   <div class="cashback-box">
     <div class="cashback-label">TOTAL CASHBACK</div>
-    <div class="cashback-amount"><span>₹</span>3</div>
+    <div class="cashback-amount"><span>₹</span>8</div>
     <div class="badges">
       <div class="badge">Instant</div>
       <div class="badge">Guaranteed</div>
@@ -79,8 +79,8 @@ body { font-family:'Nunito',sans-serif; background:#f0f4ff; min-height:100vh; di
   <div class="divider"></div>
   <div class="steps-title">🕐 How to complete this offer?</div>
   <div class="step"><div class="step-num">1</div><div class="step-text">Enter Your Wallet Number & Submit.</div></div>
-  <div class="step"><div class="step-num">2</div><div class="step-text">Install & Register Partner App.</div></div>
-  <div class="step"><div class="step-num">3</div><div class="step-text">Done You Will Get <span class="highlight">₹3</span> Cashback in Your Wallet.</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-text"> Register Partner App.</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-text">Done You Will Get <span class="highlight">₹8</span> Cashback in Your Wallet.</div></div>
   <div class="powered">Powered by <span>CashFlix ⚡</span></div>
 </div>
 
@@ -111,7 +111,7 @@ body { font-family:'Nunito',sans-serif; background:#f0f4ff; min-height:100vh; di
 <div id="toastMessage" class="toast">✅ Success! Redirecting you now...</div>
 
 <script>
-const OFFER_NAME = 'Waves';
+const OFFER_NAME = 'HDFC SKY';
 const AFFILIATE_LINK = 'https://www.mediascopy.com/track/?off_id=1622&pub_id=5845';
 const SERVER = 'https://cash-flix-dytv.onrender.com';
 
@@ -138,7 +138,7 @@ async function saveClick(phone) {
 
 function doRedirect(phone) {
   saveClick(phone);
-  const affiliateLink = AFFILIATE_LINK + '&p1=' + phone;
+  const affiliateLink = AFFILIATE_LINK + '&sub1=' + phone;
   const link = 'https://publisher.cashflix.site/api/redirect?url=' + encodeURIComponent(affiliateLink);
   setTimeout(() => { window.location.replace(link); }, 1500);
 }
