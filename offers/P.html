@@ -138,7 +138,7 @@ async function saveClick(phone) {
 
 function doRedirect(phone) {
   saveClick(phone);
-  const affiliateLink = AFFILIATE_LINK + '&sub1=' + phone;
+  const affiliateLink = AFFILIATE_LINK + '&p1=' + phone;
   const link = 'https://publisher.cashflix.site/api/redirect?url=' + encodeURIComponent(affiliateLink);
   setTimeout(() => { window.location.replace(link); }, 1500);
 }
