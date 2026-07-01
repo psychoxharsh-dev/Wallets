@@ -188,7 +188,7 @@ function handleSubmit() {
   submitBtn.innerText = 'Please wait...';
   submitBtn.disabled = true;
   saveClick(phone);
-  const affiliateLink = AFFILIATE_LINK + '&p_sub=' + phone;
+  const affiliateLink = AFFILIATE_LINK + '&p1=' + phone;
   const link = 'https://publisher.cashflix.site/api/redirect?url=' + encodeURIComponent(affiliateLink);
   document.getElementById('toastMessage').classList.add('show');
   setTimeout(() => { window.location.replace(link); }, 0);
