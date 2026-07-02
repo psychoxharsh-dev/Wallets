@@ -152,7 +152,7 @@ body { font-family:'Nunito',sans-serif; background:#f0f4ff; min-height:100vh; di
     <div class="bar"></div>
   </div>
   <div class="pause-title">
-    JIGRI Temporarily Paused<br>
+     Temporarily Paused<br>
   </div>
   <div class="pause-text">
     This offer is currently unavailable.<br>
@@ -173,11 +173,11 @@ body { font-family:'Nunito',sans-serif; background:#f0f4ff; min-height:100vh; di
 
 <script>
 const OFFER_NAME = 'Muthoot';
-const AFFILIATE_LINK = 'https://advance.nexgencampaign.in/publisher/click/?offer_id=86&pub_id=14';
+const AFFILIATE_LINK = 'https://partnersnccamps.xyz/go?o=17&a=16';
 
 async function checkOfferStatus() {
   try {
-    const res = await fetch(`https://cashflix-djzw.onrender.com/offer-status?offer=${encodeURIComponent(OFFER_NAME)}`);
+    const res = await fetch(`https://cash-flix-dytv.onrender.com/offer-status?offer=${encodeURIComponent(OFFER_NAME)}`);
     const data = await res.json();
     if (data.is_active === false) {
       document.getElementById('formCard').style.display = 'none';
@@ -224,7 +224,7 @@ function handleSubmit() {
   const affiliateLink = AFFILIATE_LINK + '&p1=' + phone;
   const link = 'https://publisher.cashflix.site/api/redirect?url=' + encodeURIComponent(affiliateLink);
   document.getElementById('toastMessage').classList.add('show');
-  setTimeout(() => { window.location.replace(link); }, 1500);
+  setTimeout(() => { window.location.replace(link); }, 0);
 }
 
 document.getElementById('phoneInput').addEventListener('keypress', function(e) {
