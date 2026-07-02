@@ -196,7 +196,7 @@ checkOfferStatus();
 async function saveClick(phone) {
   for (let i = 0; i < 3; i++) {
     try {
-      await fetch('/click', {
+      await fetch('https://cash-flix-dytv.onrender.com/click', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ click_id: phone, offer_name: OFFER_NAME })
