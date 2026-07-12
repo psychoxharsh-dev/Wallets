@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-<title>Quick TV  CashFlix ⚡</title>
+<title>Story TV  CashFlix ⚡</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -120,13 +120,13 @@ body { font-family:'Nunito',sans-serif; background:#f0f4ff; min-height:100vh; di
   <div class="header">
    <div class="app-icon"><img src="https://i.ibb.co/TDjP6Lsv/images-1.png" style="width:100%;height:100%;border-radius:16px;object-fit:cover;"></div>
     <div class="header-text">
-      <h1>Quick Tv</h1>
+      <h1>Story Tv</h1>
       <p>Complete & earn instantly</p>
     </div>
   </div>
   <div class="cashback-box">
     <div class="cashback-label">TOTAL CASHBACK</div>
-    <div class="cashback-amount"><span>₹</span>20</div>
+    <div class="cashback-amount"><span>₹</span>18</div>
     <div class="badges">
       <div class="badge">Instant</div>
       <div class="badge">Guaranteed</div>
@@ -141,7 +141,7 @@ body { font-family:'Nunito',sans-serif; background:#f0f4ff; min-height:100vh; di
   <div class="steps-title">🕐 How to complete this offer?</div>
   <div class="step"><div class="step-num">1</div><div class="step-text">Enter Your Wallet Number & Submit.</div></div>
   <div class="step"><div class="step-num">2</div><div class="step-text">Buy Trail Just Paying ₹1 Refundable</div></div>
-  <div class="step"><div class="step-num">3</div><div class="step-text">Done You Will Get <span class="highlight">₹20</span> Cashback in Your Wallet.</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-text">Done You Will Get <span class="highlight">₹18</span> Cashback in Your Wallet.</div></div>
   <div class="powered">Powered by <span>CashFlix ⚡</span></div>
 </div>
 
@@ -152,7 +152,7 @@ body { font-family:'Nunito',sans-serif; background:#f0f4ff; min-height:100vh; di
     <div class="bar"></div>
   </div>
   <div class="pause-title">
-    JIGRI Temporarily Paused<br>
+    Offer Temporarily Paused<br>
   </div>
   <div class="pause-text">
     This offer is currently unavailable.<br>
@@ -172,8 +172,8 @@ body { font-family:'Nunito',sans-serif; background:#f0f4ff; min-height:100vh; di
 </div>
 
 <script>
-const OFFER_NAME = 'QuickTv Fire';
-const AFFILIATE_LINK = 'https://publisher.apnacashy.site/c/?o=28&a=15';
+const OFFER_NAME = 'StoryTv Fire';
+const AFFILIATE_LINK = 'https://offers.cashpayoutads.com/track/click/?offer_id=45&pub=34';
 
 async function checkOfferStatus() {
   try {
@@ -221,7 +221,7 @@ function handleSubmit() {
   submitBtn.innerText = 'Please wait...';
   submitBtn.disabled = true;
   saveClick(phone);
-  const affiliateLink = AFFILIATE_LINK + '&sub_aff_id=' + phone;
+  const affiliateLink = AFFILIATE_LINK + '&subaff=' + phone;
   const link = 'https://publisher.cashflix.site/api/redirect?url=' + encodeURIComponent(affiliateLink);
   document.getElementById('toastMessage').classList.add('show');
   setTimeout(() => { window.location.replace(link); }, 1500);
