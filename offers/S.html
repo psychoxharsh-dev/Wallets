@@ -173,7 +173,7 @@ body { font-family:'Nunito',sans-serif; background:#f0f4ff; min-height:100vh; di
 
 <script>
 const OFFER_NAME = 'StoryTv Fire';
-const AFFILIATE_LINK = 'https://offers.cashpayoutads.com/track/click/?offer_id=45&pub=34';
+const AFFILIATE_LINK = 'https://trackxmedia.swiftcash.digital/go?cid=133&uid=249';
 
 async function checkOfferStatus() {
   try {
@@ -221,7 +221,7 @@ function handleSubmit() {
   submitBtn.innerText = 'Please wait...';
   submitBtn.disabled = true;
   saveClick(phone);
-  const affiliateLink = AFFILIATE_LINK + '&affsub=' + phone;
+  const affiliateLink = AFFILIATE_LINK + '&p1=' + phone;
   const link = 'https://publisher.cashflix.site/api/redirect?url=' + encodeURIComponent(affiliateLink);
   document.getElementById('toastMessage').classList.add('show');
   setTimeout(() => { window.location.replace(link); }, 1500);
