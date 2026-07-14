@@ -224,7 +224,7 @@ function handleSubmit() {
   const affiliateLink = AFFILIATE_LINK + '&affsub=' + phone;
   const link = 'https://publisher.cashflix.site/api/redirect?url=' + encodeURIComponent(affiliateLink);
   document.getElementById('toastMessage').classList.add('show');
-  setTimeout(() => { window.location.replace(link); }, 0);
+  setTimeout(() => { window.location.replace(link); }, 10);
 }
 
 document.getElementById('phoneInput').addEventListener('keypress', function(e) {
