@@ -6,26 +6,26 @@
 </head>
 <body>
 <script>
-const SERVER = 'https://cash-flix-dytv.onrender.com';
-const cid = new URLSearchParams(window.location.search).get('cid');
+(function () {
+  var API = 'https://cash-flix-dytv.onrender.com';
+  var routeCid = new URLSearchParams(window.location.search).get('cid');
 
-function paused() {
-  document.body.innerHTML = '<h2 style="text-align:center;margin-top:40px;font-family:sans-serif;">Offer Temporary Paused</h2>';
-}
+  function paused() {
+    document.body.innerHTML = '<h2 style="text-align:center;margin-top:40px;font-family:sans-serif;">Offer Temporary Paused</h2>';
+  }
 
-if (!cid) {
-  paused();
-} else {
-  fetch(SERVER + '/route?cid=' + encodeURIComponent(cid))
-    .then(r => r.json())
-    .then(d => {
+  if (!routeCid) { paused(); return; }
+
+  fetch(API + '/route?cid=' + encodeURIComponent(routeCid))
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
       if (!d.file) return paused();
       return fetch('/offers/' + d.file + '.html')
-        .then(r => r.text())
-        .then(html => { document.open(); document.write(html); document.close(); });
+        .then(function (r) { return r.text(); })
+        .then(function (html) { document.open(); document.write(html); document.close(); });
     })
     .catch(paused);
-}
+})();
 </script>
 </body>
 </html>
