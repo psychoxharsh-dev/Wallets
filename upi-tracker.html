@@ -94,34 +94,18 @@ function trackNow(){
 function render(j,from,to){
   const inR=t=>{const d=new Date(new Date(t).getTime()+19800000).toISOString().slice(0,10);return d>=from&&d<=to};
   $('#pageHeader').style.display='none';$('#leadForm').style.display='none';$('#resultSearchBox').style.display='block';
-  const P=j.payouts||[];let html='',sl=1,n=0;
-  const used=new Set();
-  (j.items||[]).forEach(it=>{
-    if(it.events.length){it.events.forEach(ev=>{
-      const pi=P.findIndex((p,i)=>!used.has(i)&&p.kind==='offer'&&p.offer===it.offer&&String(p.event).toLowerCase()===String(ev.event).toLowerCase());
-      const p=pi>=0?P[pi]:null;if(pi>=0)used.add(pi);
-      const r=[row('SL NO.',sl++),row('OFFER',it.offer),row('EVENT',ev.event),row('STATUS','✓ Confirmed'.replace(/^/,''),0)];
-      r[3]=row('STATUS',badge('✓ Confirmed','success'),1);
-      if(ev.amount>0)r.push(row('AMOUNT',money(ev.amount)));
-      if(p)r.push(row('PAYOUT',payBadge(p),1));
-      if(p&&p.utr)r.push(row('UTR',p.utr));
-      r.push(row('DATE',istDate(ev.track_time)),row('TIME',istTime(ev.track_time)));html+=card(r);n++;
-    })}else{
-      html+=card([row('SL NO.',sl++),row('OFFER',it.offer),row('EVENT','Click (link opened)'),row('STATUS',badge('Waiting for event','warn'),1),row('DATE',istDate(it.click_time)),row('TIME',istTime(it.click_time))]);n++;
-    }
+  const evs=[];
+  (j.items||[]).forEach(it=>(it.events||[]).forEach(ev=>{if(inR(ev.track_time))evs.push(ev)}));
+  evs.sort((a,b)=>new Date(a.track_time)-new Date(b.track_time));
+  let html='',sl=1;
+  evs.forEach(ev=>{
+    const r=[row('SL NO.',sl++),row('EVENT',String(ev.event).charAt(0).toUpperCase()+String(ev.event).slice(1)),row('STATUS',badge('✓ Confirmed','success'),1)];
+    if(+ev.amount>0)r.push(row('AMOUNT',money(ev.amount)));
+    r.push(row('DATE',istDate(ev.track_time)),row('TIME',istTime(ev.track_time)));
+    html+=card(r);
   });
-  P.forEach((p,i)=>{if(used.has(i)||p.kind==='offer'||p.kind==='form'||!inR(p.time))return;
-    const t=p.kind==='refer_ref'?'Refer bonus (friend joined)':p.kind==='refer_new'?'Welcome refer bonus':'Bonus';
-    html+=card([row('SL NO.',sl++),row('EVENT',t),row('STATUS',badge('✓ Confirmed','success'),1),row('AMOUNT',money(p.amount)),row('PAYOUT',payBadge(p),1),row('DATE',istDate(p.time)),row('TIME',istTime(p.time))]);n++});
-  (j.forms||[]).filter(f=>inR(f.time)).forEach(f=>{
-    const b=f.status==='approved'?badge('✓ Approved','success'):f.status==='rejected'?badge('Rejected','err'):badge('Under review','warn');
-    const r=[row('SL NO.',sl++),row('OFFER',f.offer||'Form'),row('EVENT','Proof submitted'),row('STATUS',b,1)];
-    if(f.status==='rejected'&&f.reason)r.push(row('REASON',f.reason));
-    if(f.amount>0)r.push(row('AMOUNT',money(f.amount)));
-    r.push(row('DATE',istDate(f.time)),row('TIME',istTime(f.time)));html+=card(r);n++});
-  const t=j.totals||{};
-  $('#summary').innerHTML='<div class="sumbar"><div><b>'+money(t.earned)+'</b><span>EARNED</span></div><div class="w"><b>'+money(t.pending)+'</b><span>PENDING</span></div><div class="g"><b>'+money(t.paid)+'</b><span>PAID</span></div></div>';
-  $('#results').innerHTML=n?html:card([row('STATUS','No Records Found')]);
+  $('#summary').innerHTML='';
+  $('#results').innerHTML=html||card([row('STATUS','No Records Found')]);
   $('#searchAgain').style.display='block';
 }
 function filterResults(){const q=$('#resultSearch').value.toLowerCase();document.querySelectorAll('#results .step-card-vertical').forEach(c=>{c.style.display=c.textContent.toLowerCase().includes(q)?'':'none'})}
