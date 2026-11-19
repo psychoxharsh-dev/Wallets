@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Proof Form</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f1e3;--card:#fffdf7;--line:#ece3cc;--ink:#1c1c1c;--mut:#8a8372;--gold:#e8c97a;--gold2:#f0dfae;--ok:#23895a;--err:#e53935;--errbg:#fde8e7}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Poppins',sans-serif;background:linear-gradient(160deg,#f7f1e3,#f0dfae);min-height:100vh;color:var(--ink);padding:16px 14px 40px}
+.wrap{max-width:560px;margin:0 auto}
+.brand{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:14px;box-shadow:0 6px 18px rgba(60,40,10,.07)}
+.bm{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#1c1c1c,#3a3a3a);color:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;box-shadow:0 0 0 3px var(--gold2)}
+.brand b{font-size:22px;font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-top:8px solid #1c1c1c;border-radius:18px;padding:20px 18px;margin-bottom:14px;box-shadow:0 6px 18px rgba(60,40,10,.06);animation:up .4s both}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card.title{border-top-color:var(--gold)}
+h1{font-size:24px;font-weight:700;line-height:1.25}
+.req{display:inline-block;margin-top:14px;background:var(--errbg);color:var(--err);font-weight:600;font-size:13px;padding:7px 14px;border-radius:999px}
+.q{font-size:16px;font-weight:500;margin-bottom:12px}.q i{color:var(--err);font-style:normal}
+.fld{width:100%;padding:14px 16px;border:1.5px solid var(--line);border-radius:14px;font:500 15px 'Poppins',sans-serif;background:#fff;outline:none}
+.fld:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(232,201,122,.3)}
+.demo{width:100%;border-radius:14px;border:1px solid var(--line);display:block;margin-top:4px}
+.instr{font-size:13.5px;color:#3a3a3a;white-space:pre-wrap;margin-bottom:12px;line-height:1.55}
+.badge{display:inline-block;background:#e4f4ea;color:var(--ok);font-weight:600;font-size:12.5px;padding:5px 12px;border-radius:999px;margin-bottom:12px}
+.drop{display:block;border:1.5px dashed var(--gold);background:#fff;border-radius:14px;padding:16px;text-align:center;font-size:14px;color:var(--mut);cursor:pointer}
+.drop b{color:var(--ink)}
+.pv{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
+.pv div{position:relative}.pv img{width:100%;height:120px;object-fit:cover;border-radius:12px;border:1px solid var(--line)}
+.pv button{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(28,28,28,.8);color:#fff;font-size:14px;line-height:1;cursor:pointer}
+.hint{font-size:12.5px;color:var(--mut);margin-top:10px}
+.err{background:var(--errbg);color:var(--err);padding:11px 14px;border-radius:12px;font-size:13.5px;font-weight:500;margin-bottom:12px}
+.hidden{display:none}
+.cta{width:100%;padding:16px;border:0;border-radius:999px;background:linear-gradient(135deg,#1c1c1c,#3a3a3a);color:var(--gold);font:600 16px 'Poppins',sans-serif;cursor:pointer;box-shadow:0 8px 20px rgba(28,28,28,.25)}
+.cta:disabled{opacity:.6}
+.done{text-align:center;padding:30px 18px}.tick{width:70px;height:70px;border-radius:50%;background:var(--ok);color:#fff;font-size:36px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.done h2{font-size:22px;margin-bottom:8px}.done p{font-size:13.5px;color:var(--mut);line-height:1.6}
+</style></head><body><div class="wrap">
+<div class="brand"><div class="bm">C</div><b>CashFlix</b></div>
+<div id="box"><div class="card" style="text-align:center;color:var(--mut)">Loading…</div></div>
+</div>
+<script>
+let API='https://cash-flix-dytv.onrender.com';
+try{const q=new URLSearchParams(location.search).get('api');if(q&&(location.protocol==='file:'||/^(localhost|127\.)/.test(location.hostname)))API=q;}catch(e){}
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>{n=Math.round((+n||0)*100)/100;return Number.isInteger(n)?String(n):n.toFixed(2)};
+const UPI_RE=/^[a-z0-9._-]{2,40}@[a-z][a-z0-9]{1,30}$/;
+const FID=(()=>{const q=parseInt(new URLSearchParams(location.search).get('f'));if(q>0)return q;const m=location.pathname.match(/(\d+)\/?$/);return m?parseInt(m[1]):0})();
+const MAX=4;let FORM=null,SHOTS=[];
+function shrink(file){return new Promise((ok,bad)=>{const fr=new FileReader();fr.onerror=()=>bad(new Error('File padh nahi paya'));
+  fr.onload=()=>{const im=new Image();im.onerror=()=>bad(new Error('Ye image nahi hai'));im.onload=()=>{
+    const r=Math.min(1,1000/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*r);c.height=Math.round(im.height*r);
+    c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+    let o=c.toDataURL('image/jpeg',.7);if(o.length>800000)o=c.toDataURL('image/jpeg',.45);
+    o.length>900000?bad(new Error('Screenshot bahut bada hai')):ok(o)};im.src=fr.result};fr.readAsDataURL(file)})}
+async function load(){
+  if(!FID){$('#box').innerHTML='<div class="err">Form link sahi nahi hai.</div>';return}
+  try{const j=await(await fetch(API+'/upi/form?id='+FID)).json();if(!j.ok)throw new Error(j.error||'Form nahi mila');FORM=j.form;draw()}
+  catch(e){$('#box').innerHTML='<div class="err">'+esc(e.message==='Failed to fetch'?'Server se connect nahi hua.':e.message)+'</div>'}
+}
+function draw(){
+  const f=FORM;document.title=f.title;
+  $('#box').innerHTML=
+  '<div class="card title"><h1>'+esc(f.title)+'</h1>'+(f.amount>0?'<div class="badge" style="margin:12px 0 0">Reward ₹'+fmt(f.amount)+'</div><br>':'')+'<span class="req">* Required</span></div>'+
+  (f.instructions?'<div class="card"><div class="instr" style="margin:0">'+esc(f.instructions)+'</div></div>':'')+
+  '<div class="card"><div class="q">Enter Your UPI ID <i>*</i></div><input id="upi" class="fld" placeholder="yourname@upi" autocapitalize="none" autocomplete="off" spellcheck="false" inputmode="email"></div>'+
+  (f.extra_label?'<div class="card"><div class="q">'+esc(f.extra_label)+' <i>*</i></div><input id="extra" class="fld" maxlength="120"></div>':'')+
+  (f.demo_shot?'<div class="card"><div class="q" style="font-weight:600">Demo Screenshot</div><img class="demo" src="'+esc(f.demo_shot)+'" alt="Demo"></div>':'')+
+  '<div class="card"><div class="q">Upload Your Screenshot as Demo <i>*</i></div><label class="drop" id="drop"><b>Choose Files</b> <span id="fn">No file chosen</span><input id="file" type="file" accept="image/*" multiple class="hidden"></label><div class="pv" id="pv"></div><div class="hint">Max '+MAX+' screenshots — ek saath select kar sakte hain</div></div>'+
+  '<div class="card"><div class="q">Note (optional)</div><input id="note" class="fld" maxlength="300" placeholder="Kuch batana ho to"></div>'+
+  '<div id="err" class="err hidden"></div><button class="cta" id="send">Submit</button>';
+  try{$('#upi').value=localStorage.getItem('cf_upi')||''}catch(e){}
+  $('#file').onchange=async e=>{const fl=[...e.target.files];e.target.value='';
+    for(const x of fl){if(SHOTS.length>=MAX){showErr('Max '+MAX+' screenshots hi allowed hain');break}
+      try{SHOTS.push(await shrink(x))}catch(er){showErr(er.message)}}
+    pv()};
+  $('#send').onclick=send;
+}
+function pv(){$('#pv').innerHTML=SHOTS.map((s,i)=>'<div><img src="'+s+'" alt=""><button type="button" onclick="rm('+i+')">×</button></div>').join('');$('#fn').textContent=SHOTS.length?SHOTS.length+' file(s) selected':'No file chosen'}
+function rm(i){SHOTS.splice(i,1);pv()}
+function showErr(m){const e=$('#err');e.textContent=m;e.classList.remove('hidden');e.scrollIntoView({block:'center',behavior:'smooth'})}
+async function send(){
+  $('#err').classList.add('hidden');
+  const upi=$('#upi').value.trim().toLowerCase();
+  if(!UPI_RE.test(upi))return showErr('UPI ID sahi daalo, jaise name@bank');
+  if(FORM.extra_label&&!$('#extra').value.trim())return showErr(FORM.extra_label+' daalo');
+  if(!SHOTS.length)return showErr('Kam se kam 1 screenshot chuno');
+  const b=$('#send');b.disabled=true;b.textContent='Sending…';
+  try{const j=await(await fetch(API+'/upi/form/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:FID,upi,shots:SHOTS,extra:FORM.extra_label?$('#extra').value.trim():'',note:$('#note').value.trim()})})).json();
+    if(!j.ok)throw new Error(j.error||'Submit nahi hua');
+    try{localStorage.setItem('cf_upi',upi)}catch(e){}
+    $('#box').innerHTML='<div class="card done"><div class="tick">✓</div><h2>Submitted</h2><p>Review ke baad paisa <b>'+esc(upi)+'</b> par aayega.<br>Status dekhne ke liye Tracker page par apna UPI daalo.</p></div>';
+  }catch(e){showErr(e.message==='Failed to fetch'?'Server se connect nahi hua.':e.message);b.disabled=false;b.textContent='Submit'}
+}
+load();
+</script></body></html>
