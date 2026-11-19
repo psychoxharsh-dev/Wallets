@@ -26,6 +26,8 @@ h1{font-size:24px;font-weight:700;line-height:1.25}
 .pv{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
 .pv div{position:relative}.pv img{width:100%;height:120px;object-fit:cover;border-radius:12px;border:1px solid var(--line)}
 .pv button{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(28,28,28,.8);color:#fff;font-size:14px;line-height:1;cursor:pointer}
+.opt{display:flex;align-items:center;gap:10px;padding:8px 2px;font-size:14.5px;cursor:pointer}.opt input{width:18px;height:18px;accent-color:#1c1c1c}
+textarea.fld{resize:vertical}select.fld{appearance:auto}
 .hint{font-size:12.5px;color:var(--mut);margin-top:10px}
 .err{background:var(--errbg);color:var(--err);padding:11px 14px;border-radius:12px;font-size:13.5px;font-weight:500;margin-bottom:12px}
 .hidden{display:none}
@@ -45,7 +47,7 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 const fmt=n=>{n=Math.round((+n||0)*100)/100;return Number.isInteger(n)?String(n):n.toFixed(2)};
 const UPI_RE=/^[a-z0-9._-]{2,40}@[a-z][a-z0-9]{1,30}$/;
 const FID=(()=>{const q=parseInt(new URLSearchParams(location.search).get('f'));if(q>0)return q;const m=location.pathname.match(/(\d+)\/?$/);return m?parseInt(m[1]):0})();
-const MAX=4;let FORM=null,SHOTS=[];
+const MAX=4;let FORM=null,ANS={};
 function shrink(file){return new Promise((ok,bad)=>{const fr=new FileReader();fr.onerror=()=>bad(new Error('Could not read the file'));
   fr.onload=()=>{const im=new Image();im.onerror=()=>bad(new Error('This is not an image'));im.onload=()=>{
     const r=Math.min(1,1000/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*r);c.height=Math.round(im.height*r);
@@ -57,35 +59,54 @@ async function load(){
   try{const j=await(await fetch(API+'/upi/form?id='+FID)).json();if(!j.ok)throw new Error(j.error||'Form not found');FORM=j.form;draw()}
   catch(e){$('#box').innerHTML='<div class="err">'+esc(e.message==='Failed to fetch'?'Could not connect to the server.':e.message)+'</div>'}
 }
+const star=r=>r?' <i>*</i>':'';
+function fieldHtml(f){
+  const id=esc(f.id),lab=esc(f.label||'');
+  if(f.type==='info')return '<div class="card"><div class="instr" style="margin:0">'+esc(f.text)+'</div></div>';
+  if(f.type==='demo')return '<div class="card"><div class="q" style="font-weight:600">'+(lab||'Demo Screenshot')+'</div><img class="demo" src="'+esc(f.img)+'" alt="Demo"></div>';
+  let inner='';
+  if(f.type==='short')inner='<input class="fld" data-q="'+id+'" maxlength="150">';
+  else if(f.type==='long')inner='<textarea class="fld" data-q="'+id+'" rows="4" maxlength="500"></textarea>';
+  else if(f.type==='select')inner='<select class="fld" data-q="'+id+'"><option value="">Choose</option>'+f.options.map(o=>'<option>'+esc(o)+'</option>').join('')+'</select>';
+  else if(f.type==='radio')inner=f.options.map((o,i)=>'<label class="opt"><input type="radio" name="r_'+id+'" value="'+esc(o)+'" data-q="'+id+'"> '+esc(o)+'</label>').join('');
+  else if(f.type==='upload')inner='<label class="drop"><b>Choose Files</b> <span id="fn_'+id+'">No file chosen</span><input type="file" accept="image/*" '+(f.max>1?'multiple ':'')+'class="hidden" data-up="'+id+'"></label><div class="pv" id="pv_'+id+'"></div><div class="hint">Up to '+f.max+' screenshot'+(f.max>1?'s — you can select several at once':'')+'</div>';
+  return '<div class="card"><div class="q">'+lab+star(f.required)+'</div>'+inner+'</div>';
+}
 function draw(){
   const f=FORM;document.title=f.title;
   $('#box').innerHTML=
-  '<div class="card title"><h1>'+esc(f.title)+'</h1>'+(f.amount>0?'<div class="badge" style="margin:12px 0 0">Reward ₹'+fmt(f.amount)+'</div><br>':'')+'<span class="req">* Required</span></div>'+
-  (f.instructions?'<div class="card"><div class="instr" style="margin:0">'+esc(f.instructions)+'</div></div>':'')+
+  '<div class="card title"><h1>'+esc(f.title)+'</h1>'+(f.description?'<div class="instr" style="margin:10px 0 0">'+esc(f.description)+'</div>':'')+(f.amount>0?'<div class="badge" style="margin:12px 0 0">Reward ₹'+fmt(f.amount)+'</div><br>':'')+'<span class="req">* Required</span></div>'+
   '<div class="card"><div class="q">Enter Your UPI ID <i>*</i></div><input id="upi" class="fld" placeholder="yourname@upi" autocapitalize="none" autocomplete="off" spellcheck="false" inputmode="email"></div>'+
-  (f.extra_label?'<div class="card"><div class="q">'+esc(f.extra_label)+' <i>*</i></div><input id="extra" class="fld" maxlength="120"></div>':'')+
-  (f.demo_shot?'<div class="card"><div class="q" style="font-weight:600">Demo Screenshot</div><img class="demo" src="'+esc(f.demo_shot)+'" alt="Demo"></div>':'')+
-  '<div class="card"><div class="q">Upload Your Screenshot as Demo <i>*</i></div><label class="drop" id="drop"><b>Choose Files</b> <span id="fn">No file chosen</span><input id="file" type="file" accept="image/*" multiple class="hidden"></label><div class="pv" id="pv"></div><div class="hint">Up to '+MAX+' screenshots — you can select several at once</div></div>'+
-  '<div class="card"><div class="q">Note (optional)</div><input id="note" class="fld" maxlength="300" placeholder="Anything you want to tell us"></div>'+
+  f.fields.map(fieldHtml).join('')+
   '<div id="err" class="err hidden"></div><button class="cta" id="send">Submit</button>';
   try{$('#upi').value=localStorage.getItem('cf_upi')||''}catch(e){}
-  $('#file').onchange=async e=>{const fl=[...e.target.files];e.target.value='';
-    for(const x of fl){if(SHOTS.length>=MAX){showErr('You can upload a maximum of '+MAX+' screenshots');break}
-      try{SHOTS.push(await shrink(x))}catch(er){showErr(er.message)}}
-    pv()};
+  document.querySelectorAll('[data-up]').forEach(inp=>{const id=inp.dataset.up,fl=f.fields.find(x=>x.id===id);ANS[id]=[];
+    inp.onchange=async e=>{const files=[...e.target.files];e.target.value='';
+      for(const x of files){if(ANS[id].length>=fl.max){showErr('You can upload a maximum of '+fl.max+' screenshot'+(fl.max>1?'s':''));break}
+        try{ANS[id].push(await shrink(x))}catch(er){showErr(er.message)}}
+      pv(id)}});
   $('#send').onclick=send;
 }
-function pv(){$('#pv').innerHTML=SHOTS.map((s,i)=>'<div><img src="'+s+'" alt=""><button type="button" onclick="rm('+i+')">×</button></div>').join('');$('#fn').textContent=SHOTS.length?SHOTS.length+' file(s) selected':'No file chosen'}
-function rm(i){SHOTS.splice(i,1);pv()}
+function pv(id){const a=ANS[id];$('#pv_'+id).innerHTML=a.map((s,i)=>'<div><img src="'+s+'" alt=""><button type="button" onclick="rm(\''+id+'\','+i+')">×</button></div>').join('');$('#fn_'+id).textContent=a.length?a.length+' file(s) selected':'No file chosen'}
+function rm(id,i){ANS[id].splice(i,1);pv(id)}
 function showErr(m){const e=$('#err');e.textContent=m;e.classList.remove('hidden');e.scrollIntoView({block:'center',behavior:'smooth'})}
 async function send(){
   $('#err').classList.add('hidden');
   const upi=$('#upi').value.trim().toLowerCase();
   if(!UPI_RE.test(upi))return showErr('Enter a valid UPI ID, like name@bank');
-  if(FORM.extra_label&&!$('#extra').value.trim())return showErr('Please fill in: '+FORM.extra_label);
-  if(!SHOTS.length)return showErr('Please upload at least 1 screenshot');
+  const answers={};
+  for(const f of FORM.fields){
+    if(f.type==='demo'||f.type==='info')continue;
+    let v;
+    if(f.type==='upload')v=ANS[f.id]||[];
+    else if(f.type==='radio'){const c=document.querySelector('input[name="r_'+f.id+'"]:checked');v=c?c.value:''}
+    else v=(document.querySelector('[data-q="'+f.id+'"]').value||'').trim();
+    const empty=Array.isArray(v)?!v.length:!v;
+    if(f.required&&empty)return showErr(f.label+' is required');
+    answers[f.id]=v;
+  }
   const b=$('#send');b.disabled=true;b.textContent='Sending…';
-  try{const j=await(await fetch(API+'/upi/form/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:FID,upi,shots:SHOTS,extra:FORM.extra_label?$('#extra').value.trim():'',note:$('#note').value.trim()})})).json();
+  try{const j=await(await fetch(API+'/upi/form/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:FID,upi,answers})})).json();
     if(!j.ok)throw new Error(j.error||'Could not submit, please try again');
     try{localStorage.setItem('cf_upi',upi)}catch(e){}
     $('#box').innerHTML='<div class="card done"><div class="tick">✓</div><h2>Submitted</h2><p>After review, the payment will be sent to <b>'+esc(upi)+'</b>.<br>Enter your UPI ID on the Tracker page to check the status.</p></div>';
