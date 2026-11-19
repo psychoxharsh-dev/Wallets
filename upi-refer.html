@@ -138,10 +138,14 @@ function copyLink(){const v=$('#referLink').value;
   const ok=()=>toast('Refer link copied','success');
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(ok,fb);else fb();
   function fb(){const i=$('#referLink');i.select();try{document.execCommand('copy');ok()}catch(e){toast('Could not copy, please copy manually','error')}}}
-fetch(API+'/upi/offers').then(r=>r.json()).then(j=>{
+fetch(API+'/upi/offers?cid='+encodeURIComponent(CID)).then(r=>r.json()).then(j=>{
   if(!j.ok)throw 0;
-  const offers=j.offers||[];const o=offers.find(x=>x.cid===CID)||offers[0];
-  if(o){CID=o.cid;$('#offerName').textContent=o.name}else $('#offerName').textContent='CashFlix';
+  const offers=j.offers||[];let o=null;
+  if(CID){o=j.match&&j.match.upi?j.match:null;
+    if(!o){$('#offerName').textContent='Offer not available';$('#submit_btn').disabled=true;
+      toast(j.match?'This offer is not available for UPI Refer & Earn':'Offer not found. Please check your link','error');return}}
+  else{o=offers[0]||null}
+  if(o){CID=o.cid;$('#offerName').textContent=o.name}else{$('#offerName').textContent='No offer available';$('#submit_btn').disabled=true}
   const rf=j.refer||{};ENABLED=rf.enabled!==false;CUSTOM=rf.custom!==false;
   if(rf.share){TOTAL=r2(o?o.payout:0);FINAL_USER=r2(TOTAL/2);FINAL_YOU=r2(TOTAL-FINAL_USER)}else{TOTAL=r2((rf.new_amt||0)+(rf.ref_amt||0));FINAL_USER=r2(rf.new_amt||0);FINAL_YOU=r2(rf.ref_amt||0)}
   animateNumber($('#subtitleAmount'),FINAL_YOU);
