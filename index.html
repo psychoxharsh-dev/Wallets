@@ -9,17 +9,23 @@
 (function () {
   var API = 'https://cash-flix-dytv.onrender.com';
   var routeCid = new URLSearchParams(window.location.search).get('cid');
+  if (!routeCid) {
+    // new style: /Offer/<cid>?source=...
+    var m = window.location.pathname.match(/^\/offer\/([^\/?#]+)/i);
+    if (m) { try { routeCid = decodeURIComponent(m[1]); } catch (e) { routeCid = m[1]; } }
+  }
 
   function paused() {
     document.body.innerHTML = '<h2 style="text-align:center;margin-top:40px;font-family:sans-serif;">Offer Temporary Paused</h2>';
   }
+  function notFound() { window.location.replace('/404.html'); }
 
-  if (!routeCid) { paused(); return; }
+  if (!routeCid) { notFound(); return; }
 
   fetch(API + '/route?cid=' + encodeURIComponent(routeCid))
     .then(function (r) { return r.json(); })
     .then(function (d) {
-      if (!d.file) return paused();
+      if (!d.file) return notFound();
       return fetch('/offers/' + d.file + '.html')
         .then(function (r) { return r.text(); })
         .then(function (html) { document.open(); document.write(html); document.close(); });
