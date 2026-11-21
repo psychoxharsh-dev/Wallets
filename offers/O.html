@@ -1,4 +1,4 @@
-                                                                          <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -54,16 +54,17 @@ body { font-family:'Nunito',sans-serif; background:#f7f1e3; min-height:100vh; di
 @media (max-width:380px) { .toast { white-space:normal; } }
 
 </style>
-<style>.cf-wait .cf-amt{visibility:hidden}</style>
+<style>@keyframes cfsh{0%{background-position:200% 0}100%{background-position:-200% 0}}.sk{background:linear-gradient(90deg,#efe6d0 25%,#f9f3e3 50%,#efe6d0 75%);background-size:200% 100%;animation:cfsh 1.2s linear infinite;border-radius:12px}#cfSk{display:none}.cf-wait #cfSk{display:block}.cf-wait #formCard{display:none!important}</style>
 <script>document.documentElement.className+=" cf-wait";</script>
 </head>
 <body>
 
 
+<div id="cfSk" class="main-card"><div style="display:flex;gap:14px;align-items:center;margin-bottom:20px"><div class="sk" style="width:64px;height:64px;border-radius:16px"></div><div style="flex:1"><div class="sk" style="height:22px;width:60%;margin-bottom:10px"></div><div class="sk" style="height:13px;width:80%"></div></div></div><div class="sk" style="height:118px;border-radius:18px;margin-bottom:20px"></div><div class="sk" style="height:16px;width:40%;margin-bottom:10px"></div><div class="sk" style="height:50px;border-radius:14px;margin-bottom:12px"></div><div class="sk" style="height:54px;border-radius:14px"></div><div style="height:1px;background:#f0ead9;margin:20px 0"></div><div class="sk" style="height:16px;width:50%;margin-bottom:16px"></div><div style="display:flex;gap:12px;margin-bottom:14px"><div class="sk" style="width:28px;height:28px;border-radius:8px"></div><div class="sk" style="height:16px;flex:1;margin-top:6px"></div></div><div style="display:flex;gap:12px;margin-bottom:14px"><div class="sk" style="width:28px;height:28px;border-radius:8px"></div><div class="sk" style="height:16px;flex:1;margin-top:6px"></div></div><div style="display:flex;gap:12px"><div class="sk" style="width:28px;height:28px;border-radius:8px"></div><div class="sk" style="height:16px;flex:1;margin-top:6px"></div></div></div>
 <div id="formCard" class="main-card">
   <div class="header">
     <div class="app-icon">
-      <img src="https://i.ibb.co/jvzKGc6F/unnamed.png" alt="Opinion Bureau" style="width:100%;height:100%;object-fit:cover;">
+      <img src="https://i.ibb.co/kZ9FwJm/images-1.jpg" alt="Opinion Bureau" style="width:100%;height:100%;object-fit:cover;">
     </div>
     <div class="header-text">
       <h1>Opinion Bureau</h1>
@@ -79,16 +80,16 @@ body { font-family:'Nunito',sans-serif; background:#f7f1e3; min-height:100vh; di
       <div class="badge">Secure</div>
     </div>
   </div>
-  <div class="form-label"><i class="fa-solid fa-credit-card"></i> UPI ID</div>
-  <input type="text" class="phone-input" id="phoneInput" placeholder="Enter Your UPI ID (name@bank)" maxlength="50" inputmode="email" autocapitalize="none" autocomplete="off" spellcheck="false">
+  <div class="form-label"><i class="fa-solid fa-credit-card"></i> Enter Your UPI ID</div>
+  <input type="text" class="phone-input" id="phoneInput" placeholder="Enter your UPI ID (name@bank)" maxlength="50" inputmode="email" autocapitalize="none" autocomplete="off" spellcheck="false">
   <div class="error-msg" id="errorMsg"><i class="fa-solid fa-triangle-exclamation"></i><span>Please enter a valid UPI ID (like name@bank)!</span></div>
   <div id="verifyBox" class="verify-box"><div id="turnstileBox"></div><div class="verify-note">Verify you are human to continue</div></div>
   <button class="submit-btn hidden" id="submitBtn" onclick="handleSubmit()">SUBMIT</button>
   <div class="divider"></div>
   <div class="steps-title"><i class="fa-solid fa-clock"></i> How to complete?</div>
-  <div class="step"><div class="step-num">1</div><div class="step-text">Enter You UPI ID &amp; Submit.</div></div>
-  <div class="step"><div class="step-num">2</div><div class="step-text">Register &amp; Complete First Survey.</div></div>
-  <div class="step"><div class="step-num">3</div><div class="step-text">Get 20 Cashback in Your UPI ID.</div></div>
+  <div class="step"><div class="step-num">1</div><div class="step-text">Enter Your UPI ID &amp; Submit.</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-text"> Register &amp; Complete First Survey.</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-text">Get ₹20 Cashback in Your UPI Account.</div></div>
   <div class="powered">Powered by CASHFLIX ⚡</div>
 </div>
 
@@ -137,6 +138,7 @@ async function checkOfferStatus() {
 checkOfferStatus();
 
 let REF_CODE = ''; try { REF_CODE = (new URLSearchParams(location.search).get('source') || new URLSearchParams(location.search).get('ref') || localStorage.getItem('cf_ref') || '').slice(0, 12); if (REF_CODE) localStorage.setItem('cf_ref', REF_CODE); } catch (e) {}
+try { var HW = window; try { if (window.top && window.top.location.origin === location.origin) HW = window.top; } catch (e) {} var HU = new URL(HW.location.href); HU.searchParams.delete('cid'); HW.history.replaceState(null, '', HU.pathname + HU.search); } catch (e) {}
 try { fetch(SERVER + '/upi/refer-info?code=' + encodeURIComponent(REF_CODE || '') + '&key=' + encodeURIComponent(OFFER_KEY)).then(function (r) { return r.json(); }).then(function (j) { if (j && (j.found === false || j.blocked)) { location.replace('/404.html'); return; } if (j && j.valid && j.amount >= 0) document.querySelectorAll('.cf-amt').forEach(function (e) { e.textContent = j.amount; }); }).catch(function () {}).then(function () { document.documentElement.classList.remove('cf-wait'); }); setTimeout(function () { document.documentElement.classList.remove('cf-wait'); }, 15000); } catch (e) { document.documentElement.classList.remove('cf-wait'); }
 async function getLink(clickId) {
   try {
