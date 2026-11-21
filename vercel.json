@@ -2,13 +2,9 @@
   "rewrites": [
     { "source": "/offer/", "destination": "/index.html" },
     { "source": "/offer", "destination": "/index.html" },
-
+    { "source": "/Offer/:slug", "destination": "/index.html" },
     { "source": "/Refer/:slug", "destination": "/upi-refer.html" },
     { "source": "/Tracker/User/:slug", "destination": "/upi-tracker.html" },
     { "source": "/Form/:id", "destination": "/upi-form.html" }
-  ],
-  "redirects": [
-    { "source": "/Offer/:slug", "destination": "/offer/?cid=:slug", "permanent": false }
   ]
 }
-
