@@ -10,7 +10,7 @@
   var API = 'https://cash-flix-dytv.onrender.com';
   var routeCid = new URLSearchParams(window.location.search).get('cid');
   if (!routeCid) {
-    // new style: /Offer/<cid>?source=...
+    // 
     var m = window.location.pathname.match(/^\/offer\/([^\/?#]+)/i);
     if (m) { try { routeCid = decodeURIComponent(m[1]); } catch (e) { routeCid = m[1]; } }
   }
@@ -28,7 +28,17 @@
       if (!d.file) return notFound();
       return fetch('/offers/' + d.file + '.html')
         .then(function (r) { return r.text(); })
-        .then(function (html) { document.open(); document.write(html); document.close(); });
+        .then(function (html) {
+          var show = function () { document.open(); document.write(html); document.close(); };
+          var m = html.match(/const OFFER_NAME = '((?:[^'\\]|\\.)*)'/);
+          if (!m) return show();
+          var name = m[1].replace(/\\(.)/g, '$1');
+          // 
+          return fetch(API + '/offer-status?offer=' + encodeURIComponent(name))
+            .then(function (r) { return r.json(); })
+            .then(function (st) { if (st && st.is_active === false) return notFound(); show(); })
+            .catch(show);
+        });
     })
     .catch(paused);
 })();
